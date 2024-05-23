@@ -1,5 +1,8 @@
 import streamlit as st
-from Backend.Main_appController import main_appController
 
-container = st.container(border=True)
-container.write("This is inside the container")
+st.title('')
+
+with st.container(border=True):
+    st.write('Find the perfect beer:')
+    if st.button('Press to start'):
+        st.switch_page(r'pages/Camera_page.py')
