@@ -4,5 +4,5 @@ st.title('Please take your picture 📷')
 picture = st.camera_input(label="Camera:", 
                           label_visibility='hidden')
 
-if picture:
-    st.image(picture)
+if picture is not None:
+    st.switch_page("pages/Questions.py")
