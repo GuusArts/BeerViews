@@ -9,17 +9,35 @@ def toMarkdownPoints(beers):
         s += "- " + str(beer) + "\n"
     return s
 
+def getBars():
+    return APICalls.getAllBars()
+
+def getBeerName(id):
+    beer = APICalls.getBeerData(id)
+    return beer['name']
+
 
 # STREAMLIT UI  
-st.title('Home')
-bars = [(0, "Koffer"), (1, "BrewgleBar")]
+bar = None
 
-for key, bar in bars:
+if bar is None:
+    st.session_state.bar = bar
+
+bars = getBars()
+st.title('Home')
+
+for bar in bars:
     with st.container(border=True):
-        st.subheader(bar)
-        beers = APICalls.getAllBeers(key)
-        beers = toMarkdownPoints(beers)
+        st.subheader(bar['name'])
+        beer_names = []
+        
+        for beer_id in bar['beer_ids']:
+            beer_names.append(getBeerName(beer_id))
+        beers = toMarkdownPoints(beer_names)
 
         with st.expander("See beer list 🍻"):
             st.markdown(beers)
 
+        if st.button("I am at this bar!", key=bar['id']):
+            st.session_state.bar = bar
+            st.switch_page(r"pages\Camera_page.py")

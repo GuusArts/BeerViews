@@ -2,6 +2,6 @@ import streamlit as st
 
 options = st.multiselect(
     "What is your top 5 beer",
-    options=['Beer1', 'Beer2', 'Beer3'])
+    options=st.session_state.bar['beer_ids'])
 
 st.write(options)
