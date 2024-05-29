@@ -1,7 +1,17 @@
 import streamlit as st
+import APICalls
 
-options = st.multiselect(
-    "What is your top 5 beer",
-    options=st.session_state.bar['beer_ids'])
+def get_all_beer_names():
+    return APICalls.getAllBeerNames()
 
-st.write(options)
+
+st.header("Please answer these questions for a better result")
+with st.form("my_form"):
+    st.write("What is your top 5 beer?")
+
+    options = st.multiselect(
+        label="Choose 5 beers",
+        options=get_all_beer_names())
+
+    # Every form must have a submit button.
+    st.form_submit_button("Submit")
