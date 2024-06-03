@@ -1,3 +1,6 @@
+import pandas as pd
+import numpy as np
+
 class Beer:
     def __init__(self, beer_data):
         self.beer = beer_data
@@ -23,7 +26,7 @@ class Beer:
             "average score palate": self.beer['Average score palate'],
             "average score taste": self.beer['Average score taste']
         }
-
+    
     @staticmethod
     def all_names(data_loader):
         data = data_loader.load_data()

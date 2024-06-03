@@ -1,4 +1,5 @@
 import requests
+import json
 
 LOCALHOST = "http://127.0.0.1:5000"
 
@@ -16,3 +17,12 @@ def getBeerData(id):
 
 def getAllBeerNames():
     return requests.get(f"{LOCALHOST}/Brewgle/getAllBeerNames").json()
+
+def getRecommendedBeer(car, top_beers, lowest_beer):
+    user = {
+        "car": car,
+        "top_beers": top_beers,
+        "lowest_beer": lowest_beer
+    }
+    response = requests.post(f"{LOCALHOST}/Brewgle/getRecommendedBeer", json=user)
+    return response.json()
