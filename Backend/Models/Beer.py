@@ -1,28 +1,14 @@
-import json
 class Beer:
-    def __init__(self, id):
-        self.path = r'D:\Documenten\Fontys\Software\Semester 6\Brewgle\Brewgle\Data\Beers.json'
-        self.json_file = self.__loadJSON()
+    def __init__(self, beer_data):
+        self.beer = beer_data
 
-        self.beer = None
-
-        for beer in self.json_file['Beers']:
+    @classmethod
+    def from_id(cls, id, data_loader):
+        data = data_loader.load_data()
+        for beer in data['Beers']:
             if beer['Id'] == id:
-                self.beer = beer
-                break
-
-        if self.beer is None:
-            raise ValueError(f"Beer with ID {id} not found")
-        
-    def all_names(self) -> list:
-        names = []
-
-        with open(self.path, 'r') as file:
-            data = json.load(file)
-
-            for beer in data['Beers']:
-                names.append(beer['Name'])
-        return names
+                return cls(beer)
+        raise ValueError(f"Beer with ID {id} not found")
 
     def get_beer_data(self):
         return {
@@ -38,6 +24,7 @@ class Beer:
             "average score taste": self.beer['Average score taste']
         }
 
-    def __loadJSON(self):
-        with open (self.path, "r") as file:
-            return json.load(file)
+    @staticmethod
+    def all_names(data_loader):
+        data = data_loader.load_data()
+        return [beer['Name'] for beer in data['Beers']]

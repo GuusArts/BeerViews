@@ -1,17 +1,17 @@
 from Models.Beer import Beer
-from flask import Blueprint
+from Models.DataLoader import DataLoader
+from flask import Blueprint, jsonify
 
 BeerController_blueprint = Blueprint("BeerController", __name__)
 
+data_loader = DataLoader(r'D:\Documenten\Fontys\Software\Semester 6\Brewgle\Brewgle\Data\Beers.json')
+
 @BeerController_blueprint.route("/Brewgle/getBeerData/<id>")
 def getBeerData(id):
-    beer_data = __getBeer(id=int(id))
-    return beer_data.get_beer_data()
+    beer = Beer.from_id(int(id), data_loader)
+    return jsonify(beer.get_beer_data())
 
 @BeerController_blueprint.route("/Brewgle/getAllBeerNames/")
 def getAllBeerNames():
-    beer_data = __getBeer(id=47841)
-    return beer_data.all_names()
-
-def __getBeer(id=None):
-    return Beer(id=id)
+    names = Beer.all_names(data_loader)
+    return jsonify(names)

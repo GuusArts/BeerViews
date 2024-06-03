@@ -1,29 +1,25 @@
-from Models.Bars import bar
-from flask import Blueprint
+from Models.Bars import Bar
+from Models.DataLoader import DataLoader
+from flask import Blueprint, jsonify
 
 BarController_blueprint = Blueprint("BarController", __name__)
 
+data_loader = DataLoader(r'D:\Documenten\Fontys\Software\Semester 6\Brewgle\Brewgle\Data\Bars.json')
+
 @BarController_blueprint.route("/Brewgle/getBarBeers/<id>")
 def getBarBeers(id):
-    bar_data = __getBar(id)
-    return bar_data.get_beers()
+    bar = Bar.from_id(int(id), data_loader)
+    return jsonify(bar.get_beers())
 
 @BarController_blueprint.route("/Brewgle/getBarName/<id>")
 def getBarName(id):
-    bar_data = __getBar(id)
-    return bar_data.get_bar_name()
+    bar = Bar.from_id(int(id), data_loader)
+    return jsonify(bar.get_bar_name())
 
 @BarController_blueprint.route("/Brewgle/getAllBars")
-def getAllBars(id=0):
-    all_bars = []
-    try:
-        while True:
-            bar_data = __getBar(id)
-            all_bars.append(bar_data.get_bar())
-            id += 1
-    except: 
-        return all_bars
-        
+def getAllBars():
+    bars = Bar.all_bars(data_loader)
+    return jsonify([bar.get_bar() for bar in bars])
 
 def __getBar(id):
-    return bar(id=int(id))
+    return Bar.from_id(int(id), data_loader)
