@@ -54,6 +54,4 @@ def getRecommendedBeer():
     new_user_embedding = get_new_user_embedding(user_scores, beer_embeddings, beer_names)
 
     scores = np.dot(beer_embeddings, new_user_embedding)
-    top_n_indices = np.argsort(scores)[-5:][::-1]
-    top_n_beers = [(beer_names[i], scores[i]) for i in top_n_indices]
-    return jsonify(top_n_beers)
+    return list(scores)
