@@ -8,18 +8,10 @@ def getBeerData(id):
     beer_data = __getBeer(id=int(id))
     return beer_data.get_beer_data()
 
-@BeerController_blueprint.route("/Brewgle/getAllBeerNames/")#TODO: Algoritmic name finder, this takes to long
-def getAllBeerNamesData(loc=0):
-    beers_data = []
-    while True:
-        try:
-            beer_data = __getBeer(loc=loc)
-            loc += 1
-            data = beer_data.get_beer_data()
-            beers_data.append(data['name'])
-            print(loc)
-        except:
-            return beers_data
+@BeerController_blueprint.route("/Brewgle/getAllBeerNames/")
+def getAllBeerNames():
+    beer_data = __getBeer(id=47841)
+    return beer_data.all_names()
 
-def __getBeer(id=None, loc=None):
-    return Beer(id=id, loc=loc)
+def __getBeer(id=None):
+    return Beer(id=id)

@@ -1,12 +1,10 @@
 import json
 class Beer:
-    def __init__(self, id, loc):
+    def __init__(self, id):
+        self.path = r'D:\Documenten\Fontys\Software\Semester 6\Brewgle\Brewgle\Data\Beers.json'
         self.json_file = self.__loadJSON()
 
         self.beer = None
-
-        if loc is not None:
-            self.beer = self.json_file['Beers'][loc]
 
         for beer in self.json_file['Beers']:
             if beer['Id'] == id:
@@ -16,11 +14,15 @@ class Beer:
         if self.beer is None:
             raise ValueError(f"Beer with ID {id} not found")
         
-    def get_beer_name(self):
-        return {
-            "id": self.beer['Id'],
-            "name": self.beer['Name']
-        }
+    def all_names(self) -> list:
+        names = []
+
+        with open(self.path, 'r') as file:
+            data = json.load(file)
+
+            for beer in data['Beers']:
+                names.append(beer['Name'])
+        return names
 
     def get_beer_data(self):
         return {
@@ -37,6 +39,5 @@ class Beer:
         }
 
     def __loadJSON(self):
-        path = r'D:\Documenten\Fontys\Software\Semester 6\Brewgle\Brewgle\Data\Beers.json'
-        with open (path, "r") as file:
+        with open (self.path, "r") as file:
             return json.load(file)

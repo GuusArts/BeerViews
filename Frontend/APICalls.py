@@ -15,6 +15,4 @@ def getBeerData(id):
     return requests.get(f"{LOCALHOST}/Brewgle/getBeerData/{id}").json()
 
 def getAllBeerNames():
-    response = requests.get(f"{LOCALHOST}/Brewgle/getAllBeerNames").json()
-    print(response)
     return requests.get(f"{LOCALHOST}/Brewgle/getAllBeerNames").json()
