@@ -42,10 +42,10 @@ def getRecommendedBeer():
     user_scores = {}
 
     for beer in user['top_beers']:
-        user_scores.update({beer: 4.5})
+        user_scores.update({beer: 5.0})
 
     for beer in user['lowest_beer']:
-        user_scores.update({beer: 1.0})
+        user_scores.update({beer: 0.0})
 
     beer_embeddings = pd.read_csv(r'D:\Documenten\Fontys\Software\Semester 6\Brewgle\Brewgle\Backend\Embeddings\beer_embeddings.csv')
     beer_names = Beer.all_names(data_loader)
