@@ -32,21 +32,22 @@ for bar in bars:
         with name_col:
             st.subheader(bar['name'])
 
-        with button_col:
-            if st.button("I am at this bar!", key=bar['id']):
-                bar.update({'beer_names':beer_names})
-                st.session_state.bar = bar
-                st.switch_page(r"pages\Camera_page.py")
-
         with st.expander("See beer list 🍻"):
             for beer_id in bar['beer_ids']:
                 beer_data = get_beer_data(beer_id)
                 col1, col2 = st.columns([3, 1])  # Adjust the width ratio as needed
 
                 with col1:
+                    beer_names.append(beer_data['name'])
                     st.write(beer_data['name'])
 
                 with col2:
                     if st.button("Chat with me", key=beer_id):
                         st.session_state.beer = beer_data 
                         st.switch_page(r"pages\Chatbot_page.py")
+        
+        with button_col:
+            if st.button("I am at this bar!", key=bar['id']):
+                bar.update({'beer_names':beer_names})
+                st.session_state.bar = bar
+                st.switch_page(r"pages\Camera_page.py")

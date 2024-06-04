@@ -13,11 +13,24 @@ def on_submit(car, top_beers, lowest_beer:False):
 
 def get_beer(scores):
     indexes = []
-#    top_n_indices = np.argsort(scores)[-5:][::-1]
-    for beer in st.session_state.bar['beer_names']:
-        print(beer)
-        indexes.append(beer_names.index(beer))
-    return [(beer_names[i], scores[i]) for i in indexes]
+    beer_names = st.session_state.bar['beer_names'] # Example list, replace with your actual data
+
+    # Ensure session state contains the bar data
+    if 'bar' not in st.session_state or 'beer_names' not in st.session_state.bar:
+        st.error("Bar data not found in session state.")
+        return []
+
+    try:
+        for beer in st.session_state.bar['beer_names']:
+            if beer in beer_names:
+                indexes.append(beer_names.index(beer))
+            else:
+                st.warning(f"Beer {beer} not found in the list of beer names.")
+        return [(beer_names[i], scores[i]) for i in indexes]
+
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+        return []
 
 
 
@@ -59,4 +72,4 @@ with st.container():
             st.session_state.recommended_beers = get_beer(scores)
         else:
             st.error('Please submit more beer for a better result')
-st.header(st.session_state.recommended_beers)
+st.write(sorted(st.session_state.recommended_beers, key=lambda x: x[1])[::-1])

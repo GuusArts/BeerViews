@@ -10,7 +10,16 @@ def getBarName(id):
     return requests.get(f"{LOCALHOST}/Brewgle/getBarName/{id}").json()
 
 def getAllBars():
-    return requests.get(f"{LOCALHOST}/Brewgle/getAllBars").json()
+    try:
+        response = requests.get("http://127.0.0.1:5000/Brewgle/getAllBars")
+        response.raise_for_status()  # Raise an HTTPError for bad responses (4xx and 5xx)
+        return response.json()
+    except ConnectionError as e:
+        print(f"Error connecting to server: {e}")
+    except requests.exceptions.HTTPError as e:
+        print(f"HTTP error occurred: {e}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 def getBeerData(id):
     return requests.get(f"{LOCALHOST}/Brewgle/getBeerData/{id}").json()
