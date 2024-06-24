@@ -1,4 +1,5 @@
 from Models.Beer import Beer
+import random as rnd
 from Models.DataLoader import DataLoader
 from flask import Blueprint, jsonify, request
 import pandas as pd
@@ -54,4 +55,5 @@ def getRecommendedBeer():
     new_user_embedding = get_new_user_embedding(user_scores, beer_embeddings, beer_names)
 
     scores = np.dot(beer_embeddings, new_user_embedding)
+
     return list(scores)

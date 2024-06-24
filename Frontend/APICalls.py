@@ -27,11 +27,12 @@ def getBeerData(id):
 def getAllBeerNames():
     return requests.get(f"{LOCALHOST}/Brewgle/getAllBeerNames").json()
 
-def getRecommendedBeer(car, top_beers, lowest_beer):
+def getRecommendedBeer(car, top_beers, lowest_beer, emotion):
     user = {
         "car": car,
         "top_beers": top_beers,
-        "lowest_beer": lowest_beer
+        "lowest_beer": lowest_beer,
+        "emotion": emotion
     }
     response = requests.post(f"{LOCALHOST}/Brewgle/getRecommendedBeer", json=user)
     return response.json()

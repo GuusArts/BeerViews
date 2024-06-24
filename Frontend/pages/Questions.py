@@ -1,4 +1,5 @@
 import streamlit as st
+import random as rnd
 import APICalls
 
 # FUNCTIONS
@@ -9,13 +10,12 @@ def get_all_beer_names():
 def setBeerRecommendation(beer):
     st.session_state.beer = beer
 
-def on_submit(car, top_beers, worst_beers):
-    return APICalls.getRecommendedBeer(car, top_beers, worst_beers)
+def on_submit(car, top_beers, worst_beers, emotion):
+    return APICalls.getRecommendedBeer(car, top_beers, worst_beers, emotion)
 
-def get_beer(scores):
+def get_beer(scores, beer_names):
     indexes = []
-    beer_names = st.session_state.bar.get('beer_names', [])
-
+    
     # Ensure session state contains the bar data
     if 'bar' not in st.session_state or 'beer_names' not in st.session_state.bar:
         st.error("Bar data not found in session state.")
@@ -23,10 +23,9 @@ def get_beer(scores):
 
     try:
         for beer in st.session_state.bar['beer_names']:
-            if beer in beer_names:
-                indexes.append(beer_names.index(beer))
-            else:
-                st.warning(f"Beer {beer} not found in the list of beer names.")
+            indexes.append(beer_names.index(beer))
+        print(indexes)
+
         return [(beer_names[i], scores[i]) for i in indexes]
 
     except Exception as e:
@@ -69,10 +68,15 @@ with st.container():
 
         if submitted and len(top_beers) >= 3:
             with st.spinner("Fetching recommendations..."):
-                scores = on_submit(car, top_beers, worst_beers)
-                st.session_state.recommended_beers = get_beer(scores)
+                scores = on_submit(car, top_beers, worst_beers, st.session_state.emotion)
+                st.session_state.recommended_beers = get_beer(scores, beer_names)
         elif submitted:
             st.error('Please submit more beer for a better result')
 
 if st.session_state.recommended_beers:
-    st.write(sorted(st.session_state.recommended_beers, key=lambda x: x[1], reverse=True))
+    emotion = st.session_state.emotion
+
+    if emotion != 'happy' and emotion != 'neutral' and emotion != 'surprise':
+        st.write(sorted(st.session_state.recommended_beers, key=lambda x: x[1], reverse=True)[0])
+    else:
+        st.write(sorted(st.session_state.recommended_beers, key=lambda x: x[1], reverse=True)[rnd.randint(0,2)])
